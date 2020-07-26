@@ -5,7 +5,7 @@ module.exports = function (grunt) {
     require('time-grunt')(grunt);
 
     // Automatically load required Grunt tasks
-    equire('jit-grunt')(grunt, {
+    require('jit-grunt')(grunt, {
         useminPrepare: 'grunt-usemin'
       });
 
