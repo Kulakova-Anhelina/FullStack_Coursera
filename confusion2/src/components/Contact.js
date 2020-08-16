@@ -75,7 +75,7 @@ class Contact extends Component {
 
                 <div className="row row-content">
                     <div className="col-12">
-                        <h3>Send us your Feedback</h3>
+                        <h2>Send us your Feedback</h2>
                     </div>
                     <div className="col-12 col-md-9">
                         <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
