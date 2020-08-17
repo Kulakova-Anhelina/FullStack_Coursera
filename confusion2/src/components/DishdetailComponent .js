@@ -6,19 +6,20 @@ import {
 import { Link } from 'react-router-dom';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
+import { addComment } from '../redux/ActionCreators';
+import { Loading } from './LoadingComponent';
 
-const ModalExample = () => {
+const CommentForm= () => {
 
-    const [username, setUsername] = useState('')
+
     const [modal, setModal] = useState(false);
     const [unmountOnClose] = useState(true);
 
     const toggle = () => setModal(!modal);
 
     const handleSubmit = (values) => {
-        setModal(false);
-        alert("Done");
 
+        addComment(values.dishId, values.rating, values.author, values.comment);
 
     }
 
@@ -39,10 +40,10 @@ const ModalExample = () => {
                     <LocalForm onSubmit={(values) => handleSubmit(values)}>
                         <Row className="form-group">
                             <Col md={12}>
-                            <Label htmlFor="firstname" >Raiting </Label>
+                                <Label htmlFor="firstname" >Raiting </Label>
                             </Col>
                             <Col md={10}>
-                            <Input type="number" id="quantity" name="quantity" min="1" max="5"/>
+                                <Input type="number" id="quantity" name="quantity" min="1" max="5" />
                             </Col>
                         </Row>
                         <Row className="form-group">
@@ -108,7 +109,7 @@ function RenderDish({ dish }) {
         return <div></div>;
     }
 }
-function RenderComments({ comments }) {
+function RenderComments({comments, addComment, dishId}) {
     if (comments != null) {
         const com = comments.map((comment) => {
             return (
@@ -121,12 +122,14 @@ function RenderComments({ comments }) {
                             </li>{' '}
                         </li>
                     </ul>
+
                 </div>
             );
         });
         return (
             <div className="col-12 col-md-5 m-1">
                 <h4>Comments</h4>
+                <CommentForm dishId={dishId} addComment={addComment} />
                 {com}
             </div>
         );
@@ -135,16 +138,25 @@ function RenderComments({ comments }) {
     }
 }
 const DishDetail = (props) => {
-
-
-    const [modal, setModal] = useState(false);
-    const [unmountOnClose, setUnmountOnClose] = useState(true);
-
-    const toggle = () => setModal(!modal);
-    const changeUnmountOnClose = e => {
-        let value = e.target.value;
-        setUnmountOnClose(JSON.parse(value));
+    if (props.isLoading) {
+        return(
+            <div className="container">
+                <div className="row">
+                    <Loading />
+                </div>
+            </div>
+        );
     }
+    else if (props.errMess) {
+        return(
+            <div className="container">
+                <div className="row">
+                    <h4>{props.errMess}</h4>
+                </div>
+            </div>
+        );
+    }
+    else if (props.dish != null)
     return (
         <div className="container">
             <div className="row">
@@ -159,15 +171,11 @@ const DishDetail = (props) => {
                 </div>
             </div>
             <div className="row">
-                <div className="col-12 col-md-12 m-1">
                     <RenderDish dish={props.dish} />
-                </div>
-                <div className="col-6 col-md-12 m-1">
-                    <RenderComments comments={props.comments} />
-                </div>
-                <div className="col-12 col-md-12 m-1">
-                    <ModalExample />
-                </div>
+                    <RenderComments comments={props.comments}
+                        addComment={props.addComment}
+                        dishId={props.dish.id}
+                    />
             </div>
         </div>
     );
