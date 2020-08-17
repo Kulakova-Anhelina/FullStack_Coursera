@@ -8,6 +8,7 @@ import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, La
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { addComment } from '../redux/ActionCreators';
 import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 const CommentForm= () => {
 
@@ -92,12 +93,7 @@ function RenderDish({ dish }) {
         return (
             <div key={dish.id} className="col-12 col-md-5 m-1">
                 <Card>
-                    <CardImg
-                        width="100%"
-                        object
-                        src={dish.image}
-                        alt={dish.name}
-                    />
+                <CardImg top src={baseUrl + dish.image} alt={dish.name} />
                     <CardBody>
                         <CardTitle>{dish.name}</CardTitle>
                         <CardText>{dish.description}</CardText>
