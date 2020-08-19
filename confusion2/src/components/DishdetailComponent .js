@@ -6,7 +6,7 @@ import {
 import { Link } from 'react-router-dom';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
-import { addComment } from '../redux/ActionCreators';
+import { postComment } from '../redux/ActionCreators';
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 
@@ -20,7 +20,7 @@ const CommentForm= () => {
 
     const handleSubmit = (values) => {
 
-        addComment(values.dishId, values.rating, values.author, values.comment);
+        postComment(values.dishId, values.rating, values.author, values.comment);
 
     }
 
@@ -105,7 +105,7 @@ function RenderDish({ dish }) {
         return <div></div>;
     }
 }
-function RenderComments({comments, addComment, dishId}) {
+function RenderComments({comments, postComment, dishId}) {
     if (comments != null) {
         const com = comments.map((comment) => {
             return (
@@ -125,7 +125,7 @@ function RenderComments({comments, addComment, dishId}) {
         return (
             <div className="col-12 col-md-5 m-1">
                 <h4>Comments</h4>
-                <CommentForm dishId={dishId} addComment={addComment} />
+                <CommentForm dishId={dishId} postComment={postComment} />
                 {com}
             </div>
         );
@@ -169,7 +169,7 @@ const DishDetail = (props) => {
             <div className="row">
                     <RenderDish dish={props.dish} />
                     <RenderComments comments={props.comments}
-                        addComment={props.addComment}
+                           postComment={props.postComment}
                         dishId={props.dish.id}
                     />
             </div>
