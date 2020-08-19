@@ -1,23 +1,29 @@
 import React, { Component } from 'react';
-import {
-    Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron,
-    Button, Modal, ModalHeader, ModalBody,
-    Form, FormGroup, Input, Label
-} from 'reactstrap';
+import { Nav, Navbar, NavbarBrand, NavbarToggler, Collapse, NavItem, Jumbotron,
+    Modal, ModalHeader, ModalBody, Button,
+    Form, FormGroup, Input, Label} from 'reactstrap';
 import { NavLink } from 'react-router-dom';
+import { baseUrl } from "../shared/baseUrl";
 
+const NavbarLink = ({to, label, faClass}) => (
+    <NavItem>
+        <NavLink className="nav-link"  to={to}><span className={faClass}></span> {label}</NavLink>
+    </NavItem>
+)
 
 class Header extends Component {
+
     constructor(props) {
         super(props);
 
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
         this.state = {
             isNavOpen: false,
             isModalOpen: false
         };
+
+        this.handleLogin = this.handleLogin.bind(this);
     }
 
     toggleNav() {
@@ -33,38 +39,35 @@ class Header extends Component {
     }
 
     handleLogin(event) {
+        alert(`user ${this.username.value} is logined in`);
         this.toggleModal();
-        alert("Username: " + this.username.value + " Password: " + this.password.value
-            + " Remember: " + this.remember.checked);
         event.preventDefault();
-
     }
 
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <Navbar dark expand="md">
                     <div className="container">
                         <NavbarToggler onClick={this.toggleNav} />
-                        <NavbarBrand className="mr-auto" href="/"><img src='assets/images/logo.png' height="30" width="41" alt='Ristorante Con Fusion' /></NavbarBrand>
+                        <NavbarBrand className="mr-auto" href="/">
+                            <img src={baseUrl + 'images/logo.png'} height="30" width="41" alt='Ristorante Con Fusion' />
+                        </NavbarBrand>
                         <Collapse isOpen={this.state.isNavOpen} navbar>
-                            <Nav navbar>
-                                <NavItem>
-                                    <NavLink className="nav-link" to='/home'><span className="fa fa-home fa-lg"></span> Home</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink className="nav-link" to='/aboutus'><span className="fa fa-info fa-lg"></span> About Us</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink className="nav-link" to='/menu'><span className="fa fa-list fa-lg"></span> Menu</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink className="nav-link" to='/contactus'><span className="fa fa-address-card fa-lg"></span> Contact Us</NavLink>
-                                </NavItem>
+                            <Nav navbar className="mr-auto">
+                                <NavbarLink to="/home" label="Home" faClass="fa fa-home fa-lg" />
+                                <NavbarLink to="/aboutus" label="About Us" faClass="fa fa-info fa-lg" />
+                                <NavbarLink to="/menu" label="Menu" faClass="fa fa-list fa-lg" />
+                                <NavbarLink to="/contactus" label="Contact Us" faClass="fa fa-address-card fa-lg" />
                             </Nav>
                             <Nav className="ml-auto" navbar>
                                 <NavItem>
-                                    <Button outline onClick={this.toggleModal}><span className="fa fa-sign-in fa-lg"></span> Login</Button>
+                                    <Button
+                                        outline
+                                        onClick={this.toggleModal}>
+                                        <span className="fa fa-sign-in fa-lg"></span>
+                                        Login
+                                    </Button>
                                 </NavItem>
                             </Nav>
                         </Collapse>
@@ -80,6 +83,8 @@ class Header extends Component {
                         </div>
                     </div>
                 </Jumbotron>
+                <br/>
+
                 <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
                     <ModalBody>
@@ -87,17 +92,17 @@ class Header extends Component {
                             <FormGroup>
                                 <Label htmlFor="username">Username</Label>
                                 <Input type="text" id="username" name="username"
-                                    innerRef={(input) => this.username = input} />
+                                       innerRef={(input) => this.username = input} />
                             </FormGroup>
                             <FormGroup>
                                 <Label htmlFor="password">Password</Label>
                                 <Input type="password" id="password" name="password"
-                                    innerRef={(input) => this.password = input} />
+                                       innerRef={(input) => this.password = input}  />
                             </FormGroup>
                             <FormGroup check>
                                 <Label check>
                                     <Input type="checkbox" name="remember"
-                                        innerRef={(input) => this.remember = input} />
+                                           innerRef={(input) => this.remember = input}  />
                                     Remember me
                                 </Label>
                             </FormGroup>
@@ -105,10 +110,10 @@ class Header extends Component {
                         </Form>
                     </ModalBody>
                 </Modal>
-            </div>
+            </React.Fragment>
         );
     }
-}
 
+}
 
 export default Header;
